@@ -19,10 +19,14 @@ class UserTokenSerializer(TokenObtainPairSerializer):
 
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
-        data['profile'] = UserSerializer(self.user).data
+        data['profile'] = ReadUserSerializer(self.user).data
 
         return data
 
+class ReadUserSerializer(CustomUserSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'first_name', 'last_name']
 {% else %}
 class AuthTokenSerializer(serializers.Serializer):
     email = serializers.CharField()
@@ -46,4 +50,4 @@ class AuthTokenSerializer(serializers.Serializer):
 class UserSerializer(CustomUserSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name']
+        fields = ['id', 'email', 'first_name', 'last_name', 'password']

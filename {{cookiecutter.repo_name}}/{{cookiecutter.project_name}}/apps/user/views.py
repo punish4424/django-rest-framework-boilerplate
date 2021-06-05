@@ -11,12 +11,14 @@ from rest_framework import status
 
 from apps.user import serializers
 from apps.utils.filters import CustomFilter
+from apps.utils.views import ReadNestedViewMixin
 
 User = get_user_model()
 
 
-class UserViewSet(ModelViewSet):
+class UserViewSet(ReadNestedViewMixin, ModelViewSet):
     serializer_class = serializers.UserSerializer
+    read_serializer_class = serializers.UserSerializer
     queryset = User.objects.all()
     filter_backends = (CustomFilter,)
     custom_filter_fields = {"active": "is_active"}
